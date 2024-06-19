@@ -8,14 +8,14 @@ class SongContainer extends StatelessWidget {
   final double imgSize;
   final bool isCompleted;
 
-  const SongContainer(
-      {Key key,
-      this.song,
-      this.topMargin,
-      this.leftMargin,
-      this.imgSize,
-      this.isCompleted})
-      : super(key: key);
+  const SongContainer({
+    super.key,
+    required this.song,
+    required this.topMargin,
+    required this.leftMargin,
+    required this.imgSize,
+    required this.isCompleted,
+  });
 
   @override
   Widget build(BuildContext context) {

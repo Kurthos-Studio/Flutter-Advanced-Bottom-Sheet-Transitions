@@ -12,7 +12,7 @@ class BottomSheetTransition extends StatefulWidget {
 
 class _BottomSheetTransitionState extends State<BottomSheetTransition>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
   double get maxHeight => MediaQuery.of(context).size.height - 40;
   double songImgStartSize = 45;
   double songImgEndSize = 120;
@@ -35,7 +35,7 @@ class _BottomSheetTransitionState extends State<BottomSheetTransition>
   }
 
   double lerp(double min, double max) {
-    return lerpDouble(min, max, _controller.value);
+    return lerpDouble(min, max, _controller.value)!;
 
     /// lerpDouble: Linearly interpolate between two numbers,
     /// `a` and `b`, by an extrapolation factor `t`.
@@ -51,18 +51,17 @@ class _BottomSheetTransitionState extends State<BottomSheetTransition>
   }
 
   void verticalDragUpdate(DragUpdateDetails details) {
-    _controller.value -= details.primaryDelta / maxHeight;
+    _controller.value -= details.primaryDelta! / maxHeight;
 
     /// when drag the sheet => update _controller.value => lerp function work =>
     /// update the sheet height and font,icon,image size,margin
   }
 
   void verticalDragEnd(DragEndDetails details) {
-    if (_controller.isAnimating ||
-        _controller.status == AnimationStatus.completed) return;
+    if (_controller.isAnimating || _controller.status == AnimationStatus.completed)
+      return;
 
-    final double flingVelocity =
-        details.velocity.pixelsPerSecond.dy / maxHeight;
+    final double flingVelocity = details.velocity.pixelsPerSecond.dy / maxHeight;
 
     if (flingVelocity < 0) {
       _controller.fling(velocity: math.max(1, -flingVelocity));
@@ -146,18 +145,15 @@ class _BottomSheetTransitionState extends State<BottomSheetTransition>
                     left: 0,
                     right: 0,
                     child: SingleChildScrollView(
-                      scrollDirection:
-                          _controller.status == AnimationStatus.completed
-                              ? Axis.vertical
-                              : Axis.horizontal,
+                      scrollDirection: _controller.status == AnimationStatus.completed
+                          ? Axis.vertical
+                          : Axis.horizontal,
                       physics: BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics(),
                       ),
                       child: Container(
-                        height:
-                            (songImgEndSize + songVerticalSpace) * songs.length,
-                        width: (songImgStartSize + songHorizontalSpace) *
-                            songs.length,
+                        height: (songImgEndSize + songVerticalSpace) * songs.length,
+                        width: (songImgStartSize + songHorizontalSpace) * songs.length,
                         child: Stack(
                           children: [
                             for (Song song in songs) buildSongContainer(song),
